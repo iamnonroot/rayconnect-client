@@ -1,3 +1,3 @@
-export interface IStorageOptions {
+export interface IStorageOption {
     name: string
 }

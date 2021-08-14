@@ -1,12 +1,13 @@
 {
   "name": "@iamnonroot/rayconnect-client",
-  "version": "0.0.1-alpha",
+  "version": "0.0.1-alpha-1",
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "tsc --build && webpack",
+    "build:all": "tsc --build && webpack",
     "build:ts": "tsc --build",
-    "build:webpack": "webpack"
+    "build:webpack": "webpack",
+    "github:publish": "./build-up.sh"
   },
   "keywords": [],
   "author": {
@@ -14,8 +15,15 @@
     "email": "iamnonroot@gmail.com",
     "url": "https://iamroot.ir"
   },
+  "repository": {
+    "url": "https://github.com/iamnonroot/rayconnect-client",
+    "type": "git"
+  },
   "homepage": "https://iamroot.ir/repo/rayconnect-client",
   "license": "MIT",
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com/iamnonroot"
+  },
   "devDependencies": {
     "typescript": "^4.3.5",
     "webpack": "^5.50.0",
