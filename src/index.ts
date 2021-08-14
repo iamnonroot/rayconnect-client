@@ -2,11 +2,12 @@ import RayconnectClient from 'rayconnect-client';
 import { IRayconnectOption } from './interface';
 // Services
 import { AuthService } from './service/service.auth';
+import { DatabaseService } from './service/service.database';
 import { StorageService } from './service/service.storage';
 import { UserService } from './service/service.user';
 
 export class Rayconnect {
-    private client: RayconnectClient;
+    public client: RayconnectClient;
 
     constructor(options: IRayconnectOption) {
         this.client = new RayconnectClient({
@@ -26,6 +27,10 @@ export class Rayconnect {
     }
 
     get storage(): StorageService {
-        return new StorageService(this.client);
+        return new StorageService(this);
+    }
+
+    get database(): DatabaseService {
+        return new DatabaseService(this);
     }
 }
