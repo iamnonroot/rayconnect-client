@@ -1,8 +1,8 @@
 import { KeyValue } from "../interface/service.storage";
-import { IStorageOptions } from "../interface/storage";
+import { IStorageOption } from "../interface/storage";
 import { Rayconnect } from "../index";
 
-export function Storage(options: IStorageOptions) {
+export function Storage(options: IStorageOption) {
     return <T extends { new(...args: any[]): {} }>(constructor: T) => {
         return class Storage extends constructor {
             STORAGE_NAME: string = options.name;
@@ -10,7 +10,7 @@ export function Storage(options: IStorageOptions) {
     }
 }
 
-export class ofSimple {
+export class SimpleStorage {
     constructor(protected rayconnect: Rayconnect) { }
 
     protected get NAME(): string {
@@ -18,7 +18,7 @@ export class ofSimple {
     }
 }
 
-export class ofLoadAndSave<T> extends ofSimple {
+export class LoadAndSaveStorage<T> extends SimpleStorage {
     public items: T[] = [];
 
     constructor(protected rayconnect: Rayconnect) {
@@ -46,7 +46,7 @@ export class ofLoadAndSave<T> extends ofSimple {
     }
 }
 
-export class ofSetAndGet<T> extends ofSimple {
+export class SetAndGetStorage<T> extends SimpleStorage {
     public async setItem(value: T): Promise<void> {
         await this.rayconnect.storage.setItem<T>(this.NAME, value);
     }
