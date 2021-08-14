@@ -3,7 +3,7 @@ unofficial, customized and advanced version of [rayconnect-client](https://www.n
 
 
 ## Install
-You can install this package from github registry (not in npm !). You must create a file named `.npmrc` in your root of Angular project next to `package.json` and add the following line to the file.
+You can install this package from github registry (not in npm !). You must create a file named `.npmrc` in your root of project next to `package.json` and add the following line to the file.
 
 ```
 @iamnonroot-page:registry=https://npm.pkg.github.com
