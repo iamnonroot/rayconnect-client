@@ -1,7 +1,11 @@
 import Rayconnect from "rayconnect-client";
-import { UsernameAndPassword } from "../interface/service.auth";
+import { AuthEvents, IAuthCallback, IAuthEvent, UsernameAndPassword } from "../interface/service.auth";
+
+let callback: IAuthCallback;
+let event: IAuthEvent = {};
 
 export class AuthService {
+
     constructor(private rayconnect: Rayconnect) { }
 
     public async init(): Promise<boolean> {
@@ -12,13 +16,24 @@ export class AuthService {
         }
         return false;
     }
+    private on(name: AuthEvents, callback: Function): void {
+        (event as any)[name] = callback;
+    }
+
+    public event(callback: Function): void{
+        this.on('auth', callback);
+    }
+
+    public setCallback(functions: IAuthCallback): void {
+        callback = functions;
+    }
 
     public getToken(): string | null | undefined {
-        return window.localStorage.getItem('rayconnect-token');
+        return callback && callback.getToken ? callback.getToken() : window != undefined ? window.localStorage.getItem('rayconnect-token') : null;
     }
 
     public setToken(token: string): void {
-        window.localStorage.setItem('rayconnect-token', token);
+        callback && callback.setToken ? callback.setToken(token) : window != undefined ? window.localStorage.setItem('rayconnect-token', token) : null;
     }
 
     public async asGuest(): Promise<void> {
@@ -30,6 +45,7 @@ export class AuthService {
 
     public async from(token: string): Promise<void> {
         await this.rayconnect.Auth(token);
+        if (event['auth']) event['auth']();
     }
 
     public async with(data: UsernameAndPassword): Promise<boolean> {
