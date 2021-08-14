@@ -1,7 +1,9 @@
-npm run build
+npm run build:all
 
 cp package.json dist/package.json
 
 cp tsconfig.json dist/tsconfig.json
 
-cp LICENSE  dist/LICENSE
+cd dist
+
+npm publish
