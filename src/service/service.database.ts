@@ -17,6 +17,10 @@ export class DatabaseService {
         Object.assign(databases, { [name]: item });
     }
 
+    public async create<T>(name: string, data: T): Promise<void> {
+        await this.rayconnect.client.store.add(name, data as any);
+    }
+
     public async find<T>(name: string, query: object = {}): Promise<T[]> {
         return await this.rayconnect.client.store.findByQuery(name, query) as T[];
     }

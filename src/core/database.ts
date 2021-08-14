@@ -16,6 +16,10 @@ export class SimpleDatabase<T> {
         return (this as any)['DATABASE_NAME'];
     }
 
+    public async create(data: T): Promise<void> {
+        await this.rayconnect.client.store.add(this.NAME, data as any);
+    }
+
     public async find(query: object = {}): Promise<T[]> {
         return await this.rayconnect.client.store.findByQuery(this.NAME, query) as T[];
     }
