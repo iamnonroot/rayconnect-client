@@ -76,7 +76,7 @@ export class QueryService {
         }
     }
 
-    public send<T>(option: SendQuery<T>): void {
+    public send(option: SendQuery): void {
         let execQueryOption: any = {
             scope: option.scope,
             address: option.address,
@@ -92,7 +92,7 @@ export class QueryService {
         this.rayconnect.client.execQuery(execQueryOption);
     }
 
-    public async exec<T>(option: ExecQuery<T>): Promise<ExecQueryResponse<T>> {
+    public async exec<T>(option: ExecQuery): Promise<ExecQueryResponse<T>> {
         let runQueryOption: any = {
             scope: option.scope,
             method: option.method,
@@ -102,9 +102,12 @@ export class QueryService {
 
         if (option.user) runQueryOption['user'] = option.user;
         if (option.token) runQueryOption['token'] = option.token;
+        try {
+            let res = await this.rayconnect.client.Run(runQueryOption);
+            return { body: res['data'], user: res.sender, token: res.token || '*', at: res.date.unix || Date.now() };
+        } catch (error) {
+            return Promise.reject(error);
+        }
 
-        let res = await this.rayconnect.client.Run(runQueryOption);
-
-        return { body: res['data'], user: res.sender, token: res.token || '*', at: res.date.unix || Date.now() };
     }
 }

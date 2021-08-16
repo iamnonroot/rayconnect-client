@@ -17,12 +17,12 @@ export interface OnQueryCallback {
     (request: IQueryRequest<any>, response: IQueryResponse): void;
 }
 
-export interface SendQuery<T> extends BaseQuery {
-    data: T | any
+export interface SendQuery extends BaseQuery {
+    data: object | any
     user?: string
     token?: string
 }
 
-export interface ExecQuery<T> extends SendQuery<T> { }
+export interface ExecQuery extends SendQuery { }
 
 export interface ExecQueryResponse<T> extends IQueryRequest<T> { }
