@@ -2,7 +2,7 @@ import { Rayconnect } from '../index';
 
 let databases: any = {};
 
-type StorageOf<T> = new (...args: any[]) => T;
+type DatabaseeOf<T> = new (...args: any[]) => T;
 
 export class DatabaseService {
     constructor(private rayconnect: Rayconnect) { }
@@ -11,7 +11,7 @@ export class DatabaseService {
         return databases[name];
     }
 
-    public from<T>(database: StorageOf<T>): void {
+    public from<T>(database: DatabaseeOf<T>): void {
         let item: T = new database(this.rayconnect);
         let name: string = (item as any)['DATABASE_NAME'];
         Object.assign(databases, { [name]: item });

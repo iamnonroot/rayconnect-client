@@ -3,7 +3,7 @@ import { IDatabaseOption } from "../interface/database";
 
 export function Database(options: IDatabaseOption) {
     return <T extends { new(...args: any[]): {} }>(constructor: T) => {
-        return class Storage extends constructor {
+        return class Database extends constructor {
             DATABASE_NAME: string = options.name;
         }
     }

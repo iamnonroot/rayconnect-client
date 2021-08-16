@@ -48,9 +48,9 @@ export class AuthService {
         if (event['auth']) event['auth']();
     }
 
-    public async with(data: UsernameAndPassword): Promise<boolean> {
+    public async with(input: UsernameAndPassword): Promise<boolean> {
         try {
-            let res = await this.rayconnect.LoginWithPassword({ username: data.username, password: data.password });
+            let res = await this.rayconnect.LoginWithPassword({ username: input.username, password: input.password });
             if (res['status'] == false) return false;
             else {
                 let token = res['data']['token'];
