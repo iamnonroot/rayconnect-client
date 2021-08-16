@@ -25,6 +25,14 @@
     - [exec](#exec)
 
 - [اینترفیس ها](#اینترفیس-ها)
+    - [IQueryOption](#IQueryOption)
+    - [IQueryRequest](#IQueryRequest)
+    - [IQueryResponse](#IQueryResponse)
+    - [RunQuery](#RunQuery)
+    - [OnQuery](#OnQuery)
+    - [SendQuery](#SendQuery)
+    - [ExecQuery](#ExecQuery)
+    - [ExecQueryResponse](#ExecQueryResponse)
 
 <br><br>
 
@@ -44,16 +52,22 @@
 
 | ورودی |‌ اجباری |‌ نوع |‌ تابع |‌ توضیحات |
 |-|-|-|-|-|
-|user| false | string یا "*" یا "guest" | send و exec | آی دی نام کاربر و اگر * باشد یعنی همه کاربران بجز مهمان و اگر guest باشد یعنی مهمان ها و همه کاربران| 
+|user| false | string یا "*" یا "guest" | send و exec | آی دی کاربر و اگر * باشد یعنی همه کاربران بجز مهمان و اگر guest باشد یعنی مهمان ها و همه کاربران| 
 |token| false | string یا "*" |‌ send و exec | توکن کاربر که اگر * باشد یعنی به همه ی توکن های کاربر |
 | data | true | object یا any | send و exec | داده ای که می خواهید ارسال کنید | 
-| permission |  true | string یا "*" یا "guest" | setPermission و  @Query | آی دی نام کاربر و اگر * باشد یعنی همه کاربران بجز مهمان و اگر guest باشد یعنی مهمان ها و همه کاربران |
+| permission |  true | string یا "*" یا "guest" | setPermission و  @Query | آی دی کاربر و اگر * باشد یعنی همه کاربران بجز مهمان و اگر guest باشد یعنی مهمان ها و همه کاربران |
 
 <br><br>
 
 # دکوراتور ها
-دکوراتور ها که فقط در *TypeScript* قابل استفاده هستند برای ساده سازی و زیبایی کد شما مورد استفاده قرار میگیرد. در بخش اینترفیس ها مقادیر دیگر نوشته شده است.  
-گوش دادن به یک کوئری و اجرای دستورات لازمه وقتی که درخواست آن ارسال شد. توجه داشته باشید که این دکوراتور فقط دستورات *setPermission* و *on* را به شکل خوشگل تری اجرا میکند.
+دکوراتور ها که فقط در *TypeScript* قابل استفاده هستند برای ساده سازی و زیبایی کد شما مورد استفاده قرار میگیرد.
+
+> در بخش [اینترفیس ها](#اینترفیس-ها) مقادیر دیگر نوشته شده است.  
+
+گوش دادن به یک کوئری و اجرای دستورات لازمه وقتی که درخواست آن ارسال شد.
+
+> توجه داشته باشید که این دکوراتور فقط دستورات [*setPermission*](#setPermission) و [*on*](#on) را به شکل خوشگل تری اجرا میکند.
+
 نحوه اجرایی و ساختن آن در قطعه کد زیر می بینید :
 </div><br>
 
@@ -233,6 +247,7 @@ rayconnect.query.exec({
 کد هایی که برای اینترفیس نوشته شده ، پیوست خورده اند.
 </div><br>
 
+## IQueryOption
 ```typescript
 interface IQueryOption {
     scope: string
@@ -240,28 +255,38 @@ interface IQueryOption {
     address: string,
     access?: 'guest' | '*' | string
 }
-
+```
+## IQueryRequest
+```typescript
 interface IQueryRequest<T> {
     body: T
     user: string
     token: string
     at: number
 }
-
+```
+## IQueryResponse
+```typescript
 interface IQueryResponse {
     send: (data: any) => void
 }
-
+```
+## RunQuery
+```typescript
 interface RunQuery {
     run: (request: IQueryRequest<any>, response: IQueryResponse) => Promise<void> | void
 }
-
+```
+## OnQuery
+```typescript
 interface OnQuery {
     scope: string
     method: string
     address: string
 }
-
+```
+## SendQuery
+```typescript
 interface SendQuery {
     scope: string
     method: string
@@ -270,7 +295,9 @@ interface SendQuery {
     user?: string
     token?: string
 }
-
+```
+## ExecQuery
+```typescript
 interface ExecQuery {
     scope: string
     method: string
@@ -279,6 +306,13 @@ interface ExecQuery {
     user?: string
     token?: string
 }
-
-interface ExecQueryResponse<T> extends IQueryRequest<T> { }
+```
+## ExecQueryResponse
+```typescript
+interface ExecQueryResponse<T> { 
+    body: T
+    user: string
+    token: string
+    at: number
+}
 ```
