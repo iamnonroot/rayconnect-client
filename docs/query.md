@@ -1,28 +1,30 @@
+<div dir="rtl">
+
 # کوئری ها
 با کوئری ها شما می توانید درخواست هایتان را بین کاربران یا سرور اپ ارتباط بر قرار کنید و داده ها و اطلاعات را منتقل سازید. با کوئری ها شما توانایی اجرای توابع را به صورت ابری و آنلاین خواهید داشت.
 
-### فهرست
-- مفاهیم کلی
+## فهرست
+- [مفاهیم کلی](#مفاهیم-کلی)
     - address
     - method
     - scope
 
-- مفاهیم جداگانه
+- [مفاهیم جداگانه](#مفاهیم-جداگانه)
     - user & token
     - data
     - permission
 
-- دکوراتور ها
+- [دکوراتور ها](#دکوراتور-ها)
     - Query
 
-- توابع
-    - hasScope
-    - setPermission
-    - on
-    - send
-    - exec
+- [توابع](#توابع)
+    - [hasScope](#hasScope)
+    - [setPermission](#setPermission)
+    - [on](#on)
+    - [send](#send)
+    - [exec](#exec)
 
-- اینترفیس ها
+- [اینترفیس ها](#اینترفیس-ها)
 
 <br><br>
 
@@ -35,6 +37,8 @@
 | method | true | string | false | مشخص کردن نوع کار  | "GET", "POST" |
 | address | true | string | true | آدرس یا نام کوئری  | "users", "user/list"
 
+<br><br>
+
 # مفاهیم جداگانه
 این ها مفاهمی هستند که بسته به تابعی که استفاده می کنید ، جزء ورود های آن تابع استفاده قرار میگیرند.
 
@@ -42,14 +46,16 @@
 |-|-|-|-|-|
 |user| false | string یا "*" یا "guest" | send و exec | آی دی نام کاربر و اگر * باشد یعنی همه کاربران بجز مهمان و اگر guest باشد یعنی مهمان ها و همه کاربران| 
 |token| false | string یا "*" |‌ send و exec | توکن کاربر که اگر * باشد یعنی به همه ی توکن های کاربر |
-| data | true | < T > یا object یا any | send و exec | داده ای که می خواهید ارسال کنید | 
+| data | true | object یا any | send و exec | داده ای که می خواهید ارسال کنید | 
 | permission |  true | string یا "*" یا "guest" | setPermission و  @Query | آی دی نام کاربر و اگر * باشد یعنی همه کاربران بجز مهمان و اگر guest باشد یعنی مهمان ها و همه کاربران |
 
 <br><br>
+
 # دکوراتور ها
 دکوراتور ها که فقط در *TypeScript* قابل استفاده هستند برای ساده سازی و زیبایی کد شما مورد استفاده قرار میگیرد. در بخش اینترفیس ها مقادیر دیگر نوشته شده است.  
 گوش دادن به یک کوئری و اجرای دستورات لازمه وقتی که درخواست آن ارسال شد. توجه داشته باشید که این دکوراتور فقط دستورات *setPermission* و *on* را به شکل خوشگل تری اجرا میکند.
 نحوه اجرایی و ساختن آن در قطعه کد زیر می بینید :
+</div><br>
 
 ```typescript
 import { Query } from '@iamnonroot/rayconnect-client/core';
@@ -75,22 +81,31 @@ rayconnect.query.of(Posts);
 
 ...
 ```
+<div dir="rtl">
 به هیچ عنوان فرامویش نکنید که باید به رایکانکت این کلاس را معرفی کنید با دستور زیر :‌
+</div><br>
 
 ```typescript
 rayconnect.query.of(Posts);
 ```
 <br><br>
+<div dir="rtl">
+
 # توابع
+مجموعه ای از توابع و متند های کوئری عبارت اند از :‌ 
+</div><br>
 
 ## hasScope
+<div dir="rtl">
 با این تابع شما میتوانید ببینید که رایکانکت که ازش ساختین آیا اسکوپ را دارد یا ندارد. جالب است بدانید که این تابع در تابع *on* برای جلوگیری از خطا استفاده شده است و یک خطا خیلی زیبا و کاملا مفهومی چاپ می کند!
+</div><Br>
 
 ```typescript
 rayconnect.query.hasScope(scope: string): boolean;
 ```
-
+<div dir="rtl">
 مثال :‌
+</div><br>
 
 ```typescript
 if(rayconnect.query.hasScope("post")) {
@@ -101,12 +116,17 @@ if(rayconnect.query.hasScope("post")) {
 ```
 
 ## setPermission
+<div dir="rtl">
 با این تابع شما می توانید دسترسی های لازم برای گوش دادن به یک کوئری را تعیین کنید.
+</div><br>
+
 ```typescript
 rayconnect.query.setPermission(option: IQueryOption): Promise<void>;
 ```
 
-مثال : 
+<div dir="rtl">
+مثال :‌
+</div><br>
 
 ```typescript
 try {
@@ -122,13 +142,17 @@ try {
 ```
 
 ## on
+<div dir="rtl">
 گوش دادن به یک کوئری و اجرای دستورات لازمه وقتی که درخواست آن ارسال شد.
+</div><br>
 
 ```typescript
 rayconnect.query.on(option: OnQuery, callback: QueryCallback):‌ void;
 ```
 
-مثال:
+<div dir="rtl">
+مثال :‌
+</div><br>
 
 ```typescript
 rayconnect.query.on({
@@ -143,13 +167,17 @@ rayconnect.query.on({
 ```
 
 ## send
+<div dir="rtl">
 یک درخواست یک طرفه به دریافت کننده
+</div><br>
 
 ```typescript
 rayconnect.query.send(option: SendQuery): void;
 ```
 
-مثال :
+<div dir="rtl">
+مثال :‌
+</div><br>
 
 ```typescript
 rayconnect.query.send({
@@ -165,13 +193,17 @@ rayconnect.query.send({
 ```
 
 ## exec
+<div dir="rtl">
 یک درخواست دو طرفه با دریافت کننده و همراه با نتیجه
+</div><br>
 
 ```typescript
 rayconnect.query.exec<T>(option: ExecQuery): Promise<ExecQueryResponse<T>>;
 ```
 
-مثال :
+<div dir="rtl">
+مثال :‌
+</div><br>
 
 ```typescript
 interface IResult {
@@ -195,49 +227,42 @@ rayconnect.query.exec({
     // خطا رخ داده که ما گرفتیمش و به شما دادیم
 });
 ```
+<div dir="rtl">
 
-## اینترفیس ها
+# اینترفیس ها
 کد هایی که برای اینترفیس نوشته شده ، پیوست خورده اند.
+</div><br>
 
 ```typescript
-export interface IQueryOption {
+interface IQueryOption {
     scope: string
     method: string
     address: string,
     access?: 'guest' | '*' | string
 }
 
-export interface IQueryRequest<T> {
+interface IQueryRequest<T> {
     body: T
     user: string
     token: string
     at: number
 }
 
-export interface IQueryResponse {
+interface IQueryResponse {
     send: (data: any) => void
 }
 
-export interface RunQuery {
+interface RunQuery {
     run: (request: IQueryRequest<any>, response: IQueryResponse) => Promise<void> | void
 }
 
-export interface OnQuery {
+interface OnQuery {
     scope: string
     method: string
     address: string
 }
 
-export interface SendQuery {
-    scope: string
-    method: string
-    address: string
-    data: object | any
-    user?: string
-    token?: string
-}
-
-export interface ExecQuery {
+interface SendQuery {
     scope: string
     method: string
     address: string
@@ -246,5 +271,14 @@ export interface ExecQuery {
     token?: string
 }
 
-export interface ExecQueryResponse<T> extends IQueryRequest<T> { }
+interface ExecQuery {
+    scope: string
+    method: string
+    address: string
+    data: object | any
+    user?: string
+    token?: string
+}
+
+interface ExecQueryResponse<T> extends IQueryRequest<T> { }
 ```
