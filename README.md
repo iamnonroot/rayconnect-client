@@ -6,7 +6,7 @@ This package is unofficial, customized, much easier and advanced version of [ray
 You can install this package from github registry (not in npm !). You must create a file named `.npmrc` in your root of project next to `package.json` and add the following line to the file.
 
 ```
-@iamnonroot-page:registry=https://npm.pkg.github.com
+@iamnonroot:registry=https://npm.pkg.github.com
 ```
 
 At last you can install the package via npm :
