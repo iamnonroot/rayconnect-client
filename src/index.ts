@@ -5,9 +5,11 @@ import { AuthService } from './service/service.auth';
 import { DatabaseService } from './service/service.database';
 import { StorageService } from './service/service.storage';
 import { UserService } from './service/service.user';
+import { QueryService } from './service/service.query';
 
 export class Rayconnect {
     public client: RayconnectClient;
+    public options: IRayconnectOption;
 
     constructor(options: IRayconnectOption) {
         this.client = new RayconnectClient({
@@ -16,6 +18,13 @@ export class Rayconnect {
             space: options.space || 'main',
             type: options.type || 'client',
         });
+
+        this.options = {
+            aid: options.aid,
+            scopes: options.scopes,
+            space: options.space || 'main',
+            type: options.type || 'client',
+        }
     }
 
     get auth(): AuthService {
@@ -32,5 +41,9 @@ export class Rayconnect {
 
     get database(): DatabaseService {
         return new DatabaseService(this);
+    }
+
+    get query(): QueryService {
+        return new QueryService(this);
     }
 }

@@ -1,4 +1,6 @@
 export * from './service.auth';
+export * from './query';
+export * from './service.query';
 export * from './service.storage';
 
 export interface IRayconnectOption {
