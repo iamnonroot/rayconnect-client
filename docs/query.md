@@ -10,7 +10,8 @@
     - scope
 
 - [مفاهیم جداگانه](#مفاهیم-جداگانه)
-    - user & token
+    - user
+    - token
     - data
     - permission
 
@@ -52,8 +53,8 @@
 
 | ورودی |‌ اجباری |‌ نوع |‌ تابع |‌ توضیحات |
 |-|-|-|-|-|
-|user| false | string یا "*" یا "guest" | send و exec | آی دی کاربر و اگر * باشد یعنی همه کاربران بجز مهمان و اگر guest باشد یعنی مهمان ها و همه کاربران| 
-|token| false | string یا "*" |‌ send و exec | توکن کاربر که اگر * باشد یعنی به همه ی توکن های کاربر |
+| user | false | string یا "*" یا "guest" | send و exec | آی دی کاربر و اگر * باشد یعنی همه کاربران بجز مهمان و اگر guest باشد یعنی مهمان ها و همه کاربران| 
+| token | false | string یا "*" |‌ send و exec | توکن کاربر و اگر * باشد یعنی به همه ی توکن های کاربر |
 | data | true | object یا any | send و exec | داده ای که می خواهید ارسال کنید | 
 | permission |  true | string یا "*" یا "guest" | setPermission و  @Query | آی دی کاربر و اگر * باشد یعنی همه کاربران بجز مهمان و اگر guest باشد یعنی مهمان ها و همه کاربران |
 
@@ -61,8 +62,6 @@
 
 # دکوراتور ها
 دکوراتور ها که فقط در *TypeScript* قابل استفاده هستند برای ساده سازی و زیبایی کد شما مورد استفاده قرار میگیرد.
-
-> در بخش [اینترفیس ها](#اینترفیس-ها) مقادیر دیگر نوشته شده است.  
 </div>
 
 ## Query
@@ -73,12 +72,16 @@
 
 > توجه داشته باشید که این دکوراتور فقط دستورات [*setPermission*](#setPermission) و [*on*](#on) را به شکل خوشگل تری اجرا میکند.
 
-نحوه اجرایی و ساختن آن در قطعه کد زیر می بینید :
+نحوه اجرایی و ساختن آن در قطعه کد زیر به عنوان مثال می بینید :
 </div><br>
 
 ```typescript
 import { Query } from '@iamnonroot/rayconnect-client/core';
 import { RunQuery } from '@iamnonroot/rayconnect-client/interface';
+
+interface PostRequest { 
+    page: number
+}
 
 @Query({
     scope: "post",
@@ -87,7 +90,7 @@ import { RunQuery } from '@iamnonroot/rayconnect-client/interface';
     permission: "guest"
 })
 export class Posts implements RunQuery {
-    async run(request: IQueryRequest<{ page: number }>, response: IQueryResponse): Promise<void> {
+    async run(request: IQueryRequest<PostRequest>, response: IQueryResponse): Promise<void> {
         let { page } = request.body;
         // Database is doing some things ....
         response.send([...]);
@@ -101,7 +104,7 @@ rayconnect.query.of(Posts);
 ...
 ```
 <div dir="rtl">
-به هیچ عنوان فرامویش نکنید که باید به رایکانکت این کلاس را معرفی کنید با دستور زیر :‌
+به هیچ عنوان فرامویش نکنید که باید به رایکانکت این کلاس را معرفی کنید با تابع زیر :‌
 </div><br>
 
 ```typescript
