@@ -6,4 +6,6 @@ cp README.md dist/README.md
 
 cd dist
 
+rm -rf docs
+
 npm publish
