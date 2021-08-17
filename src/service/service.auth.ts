@@ -29,11 +29,11 @@ export class AuthService {
     }
 
     public getToken(): string | null | undefined {
-        return callback && callback.getToken ? callback.getToken() : window != undefined ? window.localStorage.getItem('rayconnect-token') : null;
+        return callback && callback.getToken ? callback.getToken() : window != undefined ? window.localStorage.getItem(`rayconnect-${this.rayconnect.options.aid}-token`) : null;
     }
 
     public setToken(token: string): void {
-        callback && callback.setToken ? callback.setToken(token) : window != undefined ? window.localStorage.setItem('rayconnect-token', token) : null;
+        callback && callback.setToken ? callback.setToken(token) : window != undefined ? window.localStorage.setItem(`rayconnect-${this.rayconnect.options.aid}-token`, token) : null;
     }
 
     public async asGuest(): Promise<void> {
