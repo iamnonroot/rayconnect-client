@@ -39,7 +39,6 @@ export class Rayconnect {
             space: this._options.space!,
             type: this._options.type!,
             url: this._options.endpoint?.socket,
-            connected: this._options.mode != 'http',
         });
 
     }
