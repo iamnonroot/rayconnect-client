@@ -194,7 +194,7 @@ rayconnect.query.on({
 </div><br>
 
 ```typescript
-rayconnect.query.send(option: SendQuery): void;
+rayconnect.query.send(option: SendQuery): Promise<void>;
 ```
 
 <div dir="rtl">

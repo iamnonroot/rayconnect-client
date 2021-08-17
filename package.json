@@ -27,6 +27,7 @@
     "webpack-cli": "^4.7.2"
   },
   "dependencies": {
+    "axios": "^0.21.1",
     "rayconnect-client": "^0.11.63"
   }
 }

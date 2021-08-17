@@ -16,6 +16,7 @@ export class AuthService {
         }
         return false;
     }
+
     private on(name: AuthEvents, callback: Function): void {
         (event as any)[name] = callback;
     }
@@ -37,10 +38,28 @@ export class AuthService {
     }
 
     public async asGuest(): Promise<void> {
-        let result = await this.rayconnect.client.Guest(),
-            token = result['data']['token'];
+        try {
+            if (this.rayconnect.options.mode == 'socket') {
+                let result = await this.rayconnect.client.Guest(),
+                    token = result['data']['token'];
 
-        await this.from(token);
+                await this.from(token);
+            } else {
+                let res = await this.rayconnect.http.request({
+                    'method': 'GET',
+                    'path': 'guest',
+                    'auth': false,
+                    'version': 'v2'
+                });
+                if (res.status == true) {
+                    await this.setToken(res.token as string);
+                    if (event['auth']) event['auth']();
+                }
+                else return Promise.reject('Unable get access token');
+            }
+        } catch (error) {
+            return Promise.reject(error);
+        }
     }
 
     public async from(token: string): Promise<void> {
@@ -64,18 +83,54 @@ export class AuthService {
     }
 
     public async send(phone: string): Promise<void> {
-        await this.rayconnect.client.RequestOTP(phone);
+        try {
+            if (this.rayconnect.options.mode == 'socket') {
+                await this.rayconnect.client.RequestOTP(phone);
+            } else {
+                let res = await this.rayconnect.http.request({
+                    'method': 'post',
+                    'path': 'otp',
+                    'auth': false,
+                    'version': 'v2',
+                    'data': {
+                        'phone': phone
+                    }
+                });
+            }
+        } catch (error) {
+            return Promise.reject(error);
+        }
     }
 
     public async verify(phone: string, code: string): Promise<boolean> {
         try {
-            let result: any = await this.rayconnect.client.VerifyPhone(phone, code);
-            if (result['status'] == false) return false;
-            else {
-                let token: string = result['data']['token'];
-                await this.setToken(token);
-                await this.from(token);
-                return true;
+            if (this.rayconnect.options.mode == 'socket') {
+                let result: any = await this.rayconnect.client.VerifyPhone(phone, code);
+                if (result['status'] == false) return false;
+                else {
+                    let token: string = result['data']['token'];
+                    await this.setToken(token);
+                    await this.from(token);
+                    return true;
+                }
+            } else {
+                let res = await this.rayconnect.http.request<{ token: string }>({
+                    'method': 'post',
+                    'path': 'otp',
+                    'auth': false,
+                    'version': 'v2',
+                    'data': {
+                        'phone': phone,
+                        'tokenNumber': code
+                    }
+                });
+
+                if (res.status == false || !res.body.token) return false;
+                else {
+                    await this.setToken(res.body.token);
+                    if (event['auth']) event['auth']();
+                    return true;
+                }
             }
         } catch (error) {
             return Promise.reject(false);
@@ -83,6 +138,9 @@ export class AuthService {
     }
 
     public async ed(): Promise<boolean> {
-        return await this.rayconnect.client.isAuth() as boolean;
+        if (this.rayconnect.options.mode == 'socket')
+            return await this.rayconnect.client.isAuth() as boolean;
+        else
+            return !this.getToken();
     }
 }

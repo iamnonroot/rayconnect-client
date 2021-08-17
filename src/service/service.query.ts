@@ -76,38 +76,64 @@ export class QueryService {
         }
     }
 
-    public send(option: SendQuery): void {
-        let execQueryOption: any = {
-            scope: option.scope,
-            address: option.address,
-            info: {
-                method: option.method,
-                data: option.data
-            }
-        };
-
-        if (option.user) execQueryOption['uniqueID'] = option.user;
-        if (option.token) execQueryOption['TokenID'] = option.token;
-
-        this.rayconnect.client.execQuery(execQueryOption);
-    }
-
-    public async exec<T>(option: ExecQuery): Promise<ExecQueryResponse<T>> {
-        let runQueryOption: any = {
-            scope: option.scope,
-            method: option.method,
-            address: option.address,
-            data: option.data
-        }
-
-        if (option.user) runQueryOption['user'] = option.user;
-        if (option.token) runQueryOption['token'] = option.token;
+    public async send(option: SendQuery): Promise<void> {
         try {
-            let res = await this.rayconnect.client.Run(runQueryOption);
-            return { body: res['data'], user: res.sender, token: res.token || '*', at: res.date.unix || Date.now() };
+            if (this.rayconnect.options.mode == 'socket') {
+                let execQueryOption: any = {
+                    scope: option.scope,
+                    address: option.address,
+                    info: {
+                        method: option.method,
+                        data: option.data
+                    }
+                };
+
+                if (option.user) execQueryOption['uniqueID'] = option.user;
+                if (option.token) execQueryOption['TokenID'] = option.token;
+
+                this.rayconnect.client.execQuery(execQueryOption);
+            } else {
+                await this.RequestWithHttp(option);
+            }
         } catch (error) {
             return Promise.reject(error);
         }
+    }
 
+    public async exec<T>(option: ExecQuery): Promise<ExecQueryResponse<T>> {
+        try {
+            if (this.rayconnect.options.mode == 'socket') {
+                let runQueryOption: any = {
+                    scope: option.scope,
+                    method: option.method,
+                    address: option.address,
+                    data: option.data
+                }
+
+                if (option.user) runQueryOption['user'] = option.user;
+                if (option.token) runQueryOption['token'] = option.token;
+                let res = await this.rayconnect.client.Run(runQueryOption);
+                return { body: res['data'], user: res.sender, token: res.token || '*', at: res.date.unix || Date.now() };
+            } else {
+                return await this.RequestWithHttp(option);
+            }
+        } catch (error) {
+            return Promise.reject(error);
+        }
+    }
+
+    private async RequestWithHttp<T>(option: ExecQuery): Promise<ExecQueryResponse<T>> {
+        try {
+            return await this.rayconnect.http.request<T>({
+                scope: option.scope,
+                method: option.method,
+                address: option.address,
+                data: option.data,
+                version: 'v1',
+                path: 'run'
+            }) as ExecQueryResponse<T>;
+        } catch (error) {
+            return Promise.reject(error);
+        }
     }
 }
