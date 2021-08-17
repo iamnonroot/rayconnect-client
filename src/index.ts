@@ -25,7 +25,7 @@ export class Rayconnect {
             type: options.type || 'client',
             mode: options.mode || 'socket',
             endpoint: {
-                socket: options.endpoint?.socket || 's1.iranserver1.rayconnect.ir',
+                socket: options.endpoint?.socket,
                 http: options.endpoint?.http || {
                     'v1': 'http.iranserver1.rayconnect.ir/api/v1',
                     'v2': 's1.iranserver1.rayconnect.ir/api/v2'
