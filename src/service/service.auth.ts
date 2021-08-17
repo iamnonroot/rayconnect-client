@@ -1,4 +1,4 @@
-import Rayconnect from "rayconnect-client";
+import { Rayconnect } from "../index";
 import { AuthEvents, IAuthCallback, IAuthEvent, UsernameAndPassword } from "../interface/service.auth";
 
 let callback: IAuthCallback;
@@ -20,7 +20,7 @@ export class AuthService {
         (event as any)[name] = callback;
     }
 
-    public event(callback: Function): void{
+    public event(callback: Function): void {
         this.on('auth', callback);
     }
 
@@ -37,20 +37,20 @@ export class AuthService {
     }
 
     public async asGuest(): Promise<void> {
-        let result = await this.rayconnect.Guest(),
+        let result = await this.rayconnect.client.Guest(),
             token = result['data']['token'];
 
         await this.from(token);
     }
 
     public async from(token: string): Promise<void> {
-        await this.rayconnect.Auth(token);
+        await this.rayconnect.client.Auth(token);
         if (event['auth']) event['auth']();
     }
 
     public async with(input: UsernameAndPassword): Promise<boolean> {
         try {
-            let res = await this.rayconnect.LoginWithPassword({ username: input.username, password: input.password });
+            let res = await this.rayconnect.client.LoginWithPassword({ username: input.username, password: input.password });
             if (res['status'] == false) return false;
             else {
                 let token = res['data']['token'];
@@ -64,12 +64,12 @@ export class AuthService {
     }
 
     public async send(phone: string): Promise<void> {
-        await this.rayconnect.RequestOTP(phone);
+        await this.rayconnect.client.RequestOTP(phone);
     }
 
     public async verify(phone: string, code: string): Promise<boolean> {
         try {
-            let result: any = await this.rayconnect.VerifyPhone(phone, code);
+            let result: any = await this.rayconnect.client.VerifyPhone(phone, code);
             if (result['status'] == false) return false;
             else {
                 let token: string = result['data']['token'];
@@ -83,6 +83,6 @@ export class AuthService {
     }
 
     public async ed(): Promise<boolean> {
-        return await this.rayconnect.isAuth() as boolean;
+        return await this.rayconnect.client.isAuth() as boolean;
     }
 }

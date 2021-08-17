@@ -28,11 +28,11 @@ export class Rayconnect {
     }
 
     get auth(): AuthService {
-        return new AuthService(this.client);
+        return new AuthService(this);
     }
 
     get user(): UserService {
-        return new UserService(this.client);
+        return new UserService(this);
     }
 
     get storage(): StorageService {
