@@ -30,11 +30,11 @@ export class AuthService {
     }
 
     public getToken(): string | null | undefined {
-        return callback && callback.getToken ? callback.getToken() : window != undefined ? window.localStorage.getItem(`rayconnect-${this.rayconnect.options.aid}-token`) : null;
+        return callback && callback.getToken ? callback.getToken() : typeof window != 'undefined' ? window.localStorage.getItem(`rayconnect-${this.rayconnect.options.aid}-token`) : null;
     }
 
     public setToken(token: string): void {
-        callback && callback.setToken ? callback.setToken(token) : window != undefined ? window.localStorage.setItem(`rayconnect-${this.rayconnect.options.aid}-token`, token) : null;
+        callback && callback.setToken ? callback.setToken(token) : typeof window != 'undefined' ? window.localStorage.setItem(`rayconnect-${this.rayconnect.options.aid}-token`, token) : null;
     }
 
     public async asGuest(): Promise<void> {
@@ -78,7 +78,7 @@ export class AuthService {
                 return true;
             }
         } catch (error) {
-            return Promise.reject(false);
+            return Promise.reject(error);
         }
     }
 
