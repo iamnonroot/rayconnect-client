@@ -1,12 +1,12 @@
 import { Rayconnect } from '../index';
-import { KeyValue, IStorageOption } from "../interface/service.storage";
+// import { KeyValue, IStorageOption } from "../interface/service.storage";
 
 let storages: any = {};
 
 type StorageOf<T> = new (...args: any[]) => T;
 
 export class StorageService {
-    constructor(private rayconnect: Rayconnect, private options: IStorageOption = { key: 'storage' }) { }
+    constructor(private rayconnect: Rayconnect) { }
 
     public get<T>(name: string): T {
         return storages[name];
@@ -20,9 +20,10 @@ export class StorageService {
 
     public async setItem<T>(key: string, value: T | any): Promise<boolean> {
         try {
-            let result = await this.rayconnect.client.store.findByQuery(this.options.key, { key: key }) as KeyValue<T>[] | null;
-            if (!result || result.length == 0) this.addItem(key, value);
-            else await this.updateItem(result![0].id, key, value);
+            // let result = await this.rayconnect.client.store.findByQuery(this.options.key, { key: key }) as KeyValue<T>[] | null;
+            // if (!result || result.length == 0) this.addItem(key, value);
+            // else await this.updateItem(result![0].id, key, value);
+            await this.rayconnect.client.CloudStorage.setItem(key, value);
             return true;
         } catch (error) {
             return Promise.reject(error);
@@ -31,9 +32,10 @@ export class StorageService {
 
     public async getItem<T>(key: string): Promise<T | any | null> {
         try {
-            let result = await this.rayconnect.client.store.findByQuery(this.options.key, { key: key }) as KeyValue<T>[] | null;
-            if (!result || result.length == 0) return null;
-            else return result[0].value;
+            // let result = await this.rayconnect.client.store.findByQuery(this.options.key, { key: key }) as KeyValue<T>[] | null;
+            // if (!result || result.length == 0) return null;
+            // else return result[0].value;
+            return await this.rayconnect.client.CloudStorage.getItem(key);
         } catch (error) {
             return Promise.reject(error);
         }
@@ -41,9 +43,10 @@ export class StorageService {
 
     public async removeItem(key: string): Promise<boolean> {
         try {
-            let result = await this.rayconnect.client.store.findByQuery(this.options.key, { key: key }) as KeyValue<any>[] | null;
-            if (!result || result.length == 0) await this.rayconnect.client.store.remove(this.options.key, result![0].id);
-            else return false;
+            // let result = await this.rayconnect.client.store.findByQuery(this.options.key, { key: key }) as KeyValue<any>[] | null;
+            // if (!result || result.length == 0) await this.rayconnect.client.store.remove(this.options.key, result![0].id);
+            // else return false;
+            await this.setItem(key, null);
             return true;
         } catch (error) {
             return Promise.reject(error);
@@ -58,11 +61,11 @@ export class StorageService {
         }
     }
 
-    private async updateItem<T>(id: string, key: string, value: T): Promise<void> {
-        await this.rayconnect.client.store.update(this.options.key, id, { key, value });
-    }
+    // private async updateItem<T>(id: string, key: string, value: T): Promise<void> {
+    //     await this.rayconnect.client.store.update(this.options.key, id, { key, value });
+    // }
 
-    private async addItem<T>(key: string, value: T): Promise<void> {
-        await this.rayconnect.client.store.add(this.options.key, { key, value });
-    }
+    // private async addItem<T>(key: string, value: T): Promise<void> {
+    //     await this.rayconnect.client.store.add(this.options.key, { key, value });
+    // }
 }
