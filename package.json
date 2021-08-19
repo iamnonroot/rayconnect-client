@@ -1,6 +1,6 @@
 {
   "name": "@iamnonroot/rayconnect-client",
-  "version": "0.0.1-alpha-8",
+  "version": "0.0.1-alpha-9",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -28,6 +28,6 @@
   },
   "dependencies": {
     "axios": "^0.21.1",
-    "rayconnect-client": "^0.11.63"
+    "rayconnect-client": "^0.11.64"
   }
 }
